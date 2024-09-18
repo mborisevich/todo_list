@@ -46,7 +46,15 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-
+button{
+    border: none;
+    background-color: inherit;
+    font-size: inherit;
+    font: inherit;
+}
+button:hover{
+    cursor: grab;
+}
 div.grid-container {
     height: 100vh;
     width: 100vw;
@@ -54,26 +62,47 @@ div.grid-container {
     grid-template-columns: 1fr 6fr;
     grid-template-rows: 1fr 5fr;
 }
-
+button.side-button {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    grid-template-rows: 1fr;
+    align-items: center;
+    gap: 10px;
+    font: 1.5rem;
+}
+button.side-button>img{
+    fill: red;
+}
+div#side-bar>div.icon {
+    padding: 40px;
+}
 div#side-bar {
-    background-color: red;
+    background-color: #FFC800;
     grid-row-start: 1;
     grid-row-end: 3;
     display: grid;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-columns: 1fr;
     align-items: center;
-    padding-left: 70px;
+    padding-left: 20px;
+    padding-right: 20px;
     font-size: 1.25rem;
 }
 div#nav-panel {
-    background-color: black;
+    background-color: #98A6D4;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 2rem;
+    gap: 10px;
 }
 
 div#project-container{
     display: flex;
     flex-wrap: wrap;
-    background-color: whitesmoke;
+    background-color: #12100E;
 }
 div.project {
     position: relative;
@@ -84,21 +113,46 @@ div.project {
     line-height: 2rem;
     padding: 20px;
     margin: 40px;
-    border: 2px black solid;
-    background-color: white;
+    border: none;
+    background-color: #14213D;
     overflow: scroll;
+    color: white;
 
 }
 div.project>h1 {
     font-size: 2rem;
     padding: 20px 0px;
 }
-p#edit {
+button#edit {
     position: absolute;
     top: 5px;
     right: 10px;
+    border: none;
+    background-color: white;
+}
+
+span#edit {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    background-image: url(./eye-plus-outline.svg);
+    filter: invert(100%) sepia(8%) saturate(7500%) hue-rotate(316deg) brightness(127%) contrast(110%);
+}
+span#edit>button{
+    width: 40px;
+    height: 40px;
+    opacity: 0;
+}
+span#edit>button:hover{
+    cursor: grab;
+}
+span#edit:hover{
+    filter: invert(54%) sepia(62%) saturate(3153%) hue-rotate(85deg) brightness(119%) contrast(124%);
 
 }
+
 p.project-title{
     padding-bottom: 20px;
 }
