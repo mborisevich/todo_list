@@ -7,16 +7,16 @@
     <link rel="stylesheet" src="style.css"></link>
 </head>
 <body>
-    <div class="modal-overlay-item hide">
+    <div class="modal-overlay item-overlay hide">
         <div class="modal-wrapper">
             <div class="close-btn-wrapper">
-                <button class="close-modal-btn">
+                <button class="close-modal-btn item-modal">
                     Close
                 </button>
             </div>
             <div class="modal-content">
                 <form class="item-form">
-                    <label for="name">Item name:</label>
+                    <label for="name">Todo name:</label>
                     <input type="text" name="name" id="name" required maxlength="60">
                     <label for="description">Description:</label>
                     <textarea name="description" id="description" rows="5" col="10" required></textarea>
@@ -26,30 +26,33 @@
                     <input type="number" name="priority" id="priority" min="1" max="5" required>
                     <label for="notes">Notes:</label>
                     <textarea name="notes" id="notes" required></textarea>
-                    <button class="submit-item">Create item</button>
+                    <label for="project-choice">Assign to project:</label>
+                    <select name="project-choice" id="project-choice">
+                    </select>
+                    <button class="submit-item">Create todo</button>
                 </form>
             </div>
         </div>
     </div>
-    <div class="modal-overlay-project hide">
+    <div class="modal-overlay project-overlay hide">
         <div class="modal-wrapper">
             <div class="close-btn-wrapper">
-                <button class="close-modal-btn">
+                <button class="close-modal-btn project-modal">
                     Close
                 </button>
             </div>
             <div class="modal-content">
                 <form class="project-form">
-                    <label for="name">Project name:</label>
-                    <input type="text" name="name" id="name" required maxlength="60">
-                    <label for="description">Description:</label>
-                    <textarea name="description" id="description" rows="5" col="10" required></textarea>
-                    <label for="duedate">Due date:</label>
-                    <input type="date" name="duedate" id="duedate" required>
-                    <label for="priority">Priority:</label>
-                    <input type="number" name="priority" id="priority" min="1" max="5" required>
-                    <label for="notes">Notes:</label>
-                    <textarea name="notes" id="notes" required></textarea>
+                    <label for="project-name">Project name:</label>
+                    <input type="text" name="project-name" id="project-name" required maxlength="60">
+                    <label for="project-description">Description:</label>
+                    <textarea name="project-description" id="project-description" rows="5" col="10" required></textarea>
+                    <label for="project-date">Due date:</label>
+                    <input type="date" name="project-duedate" id="project-duedate" required>
+                    <label for="project-priority">Priority:</label>
+                    <input type="number" name="project-priority" id="project-priority" min="1" max="5" required>
+                    <label for="project-notes">Notes:</label>
+                    <textarea name="project-notes" id="project-notes" required></textarea>
                     <button class="submit-project">Create project</button>
                 </form>
             </div>
@@ -59,7 +62,7 @@
         <div id="side-bar">
             <div class="icon"><img src="atom-variant.svg"></div>
             <button class="side-button open-modal-btn"><img src=folder-plus-outline.svg>Create project</button>
-            <button class="side-button"><img src="plus-box-outline.svg">Create todo</button>
+            <button class="side-button open-modal-btn-item"><img src="plus-box-outline.svg">Create todo</button>
             <button class="side-button"><img src=magnify.svg>View projects</button>
             <button class="side-button"><img src="magnify.svg">View todos</button>
         </div>
