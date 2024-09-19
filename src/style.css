@@ -30,6 +30,8 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+    width: 100%;
+    height: 100%;
 }
 ol, ul {
 	list-style: none;
@@ -52,8 +54,78 @@ button{
     font-size: inherit;
     font: inherit;
 }
-button:hover{
+/* The modal (background) */
+div.modal-overlay-project {
+    background: rgba(0,0,0,0.7);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+.modal-wrapper {
+    width: 500px;
+    height: 500px;
+    background: ghostwhite;
+    position:fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+}
+
+.open-modal-btn-wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+}
+
+.close-modal-btn{
+    padding: 8px;
+    background: slateblue;
+    font-size: 1.2rem;
+    color: ghostwhite;
+    font-weight: 5px;
+    margin-left: auto;
+    margin-top: 10px;
+    margin-right: 10px;
     cursor: grab;
+}
+.close-btn-wrapper {
+    display: flex;
+}
+.modal-content {
+    margin: 0px auto;
+    max-width: 210px;
+    width: 100%;
+}
+
+.hide {
+    display: none;
+}
+
+h1 {
+    text-align: center;
+}
+
+input {
+    width: 200px;
+    height: 20px;
+}
+.project-form,
+.item-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.project-form>button {
+    padding: 20px;
+    background-color: slateblue;
+    text-align: center;
+    color: white;
 }
 div.grid-container {
     height: 100vh;
@@ -69,12 +141,12 @@ button.side-button {
     align-items: center;
     gap: 10px;
     font: 1.5rem;
-}
-button.side-button>img{
-    fill: red;
+    cursor: grab;
 }
 div#side-bar>div.icon {
     padding: 40px;
+    height: 150px;
+    width: 150px;
 }
 div#side-bar {
     background-color: #FFC800;

@@ -3,6 +3,45 @@ const defaultproject = []
 import { compareAsc, format } from "date-fns"
 import "./style.css"
 
+const openProjectModal = document.querySelector("button.open-modal-btn");
+const openItemModal = ""
+const itemModalOverlay=""
+const closeBtnItems=""
+const createItem = document.querySelector(".submit-item")
+const modalOverlay = document.querySelector(".modal-overlay-project");
+const closeBtn = document.querySelector(".close-modal-btn");
+const createProject = document.querySelector(".submit-project")
+
+
+openProjectModal.addEventListener("click", openModal);
+modalOverlay.addEventListener("click", closeModal);
+closeBtn.addEventListener("click", closeModal);
+createProject.addEventListener("click", (event) => {
+    event.preventDefault();
+    submitProject();
+    modalOverlay.classList.add("hide")
+})
+function openModal() {
+    modalOverlay.classList.remove("hide");
+}
+
+function closeModal(event){
+    if (event.target.classList.contains("modal-overlay-project") || (event.target.classList.contains("close-modal-btn"))){
+        modalOverlay.classList.add("hide")
+    }
+}
+
+function submitProject(){
+    const nameProject = document.querySelector("input[name=name]")
+    const descriptionProject = document.querySelector("textarea[name=description]")
+    const dateProject = document.querySelector("input[name=duedate]")
+    const priorityProject = document.querySelector("input[name=priority]")
+    const notesProject = document.querySelector("textarea[name=notes]")
+    mainController.createProject(nameProject.value, descriptionProject.value, dateProject.value,
+        priorityProject.value, notesProject.value)
+    console.log(mainController.listProjects())
+}
+
 function saveProjects(){
     console.log("Saving projects")
 }
@@ -28,7 +67,7 @@ class checklistItem {
 }
 
 class Todo extends checklistItem{
-    constructor(title, description, dueDate, priority, notes = "", itemlist = []){
+    constructor(title, description, dueDate = "", priority = 1, notes = "", itemlist = []){
         super(title, description),
         this.dueDate = dueDate,
         this.dateCreated = format(new Date(), 'yyyy-MM-dd'),
@@ -72,8 +111,9 @@ class Project extends Todo {
 
 function mainProgram(){
     let projectList = []
-    function createProject(title, description, dueDate, priority){
-        const newProject = new Project(title, description, dueDate, priority)
+    const defaultproject = createProject("default", "Default project")
+    function createProject(title, description, dueDate, priority, notes){
+        const newProject = new Project(title, description, dueDate, priority, notes)
         projectList.push(newProject);
     }
     function createTodo(title, description, dueDate, priority, project){
@@ -98,6 +138,6 @@ function mainProgram(){
     return { createProject, createTodo, createTodoItem, listProjects, editItem}
 }
 
-window.program = mainProgram()
+const mainController = mainProgram()
 
 //Separate classes into certain functions

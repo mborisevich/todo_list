@@ -7,10 +7,58 @@
     <link rel="stylesheet" src="style.css"></link>
 </head>
 <body>
+    <div class="modal-overlay-item hide">
+        <div class="modal-wrapper">
+            <div class="close-btn-wrapper">
+                <button class="close-modal-btn">
+                    Close
+                </button>
+            </div>
+            <div class="modal-content">
+                <form class="item-form">
+                    <label for="name">Item name:</label>
+                    <input type="text" name="name" id="name" required maxlength="60">
+                    <label for="description">Description:</label>
+                    <textarea name="description" id="description" rows="5" col="10" required></textarea>
+                    <label for="duedate">Due date:</label>
+                    <input type="date" name="duedate" id="duedate" required>
+                    <label for="priority">Priority:</label>
+                    <input type="number" name="priority" id="priority" min="1" max="5" required>
+                    <label for="notes">Notes:</label>
+                    <textarea name="notes" id="notes" required></textarea>
+                    <button class="submit-item">Create item</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal-overlay-project hide">
+        <div class="modal-wrapper">
+            <div class="close-btn-wrapper">
+                <button class="close-modal-btn">
+                    Close
+                </button>
+            </div>
+            <div class="modal-content">
+                <form class="project-form">
+                    <label for="name">Project name:</label>
+                    <input type="text" name="name" id="name" required maxlength="60">
+                    <label for="description">Description:</label>
+                    <textarea name="description" id="description" rows="5" col="10" required></textarea>
+                    <label for="duedate">Due date:</label>
+                    <input type="date" name="duedate" id="duedate" required>
+                    <label for="priority">Priority:</label>
+                    <input type="number" name="priority" id="priority" min="1" max="5" required>
+                    <label for="notes">Notes:</label>
+                    <textarea name="notes" id="notes" required></textarea>
+                    <button class="submit-project">Create project</button>
+                </form>
+            </div>
+        </div>
+    </div>
     <div class="grid-container">
         <div id="side-bar">
             <div class="icon"><img src="atom-variant.svg"></div>
-            <button class="side-button"><img src=folder-plus-outline.svg>Create project</button>
+            <button class="side-button open-modal-btn"><img src=folder-plus-outline.svg>Create project</button>
             <button class="side-button"><img src="plus-box-outline.svg">Create todo</button>
             <button class="side-button"><img src=magnify.svg>View projects</button>
             <button class="side-button"><img src="magnify.svg">View todos</button>
@@ -20,6 +68,7 @@
             <p>Do laundry (deadline)</p>
         </div>
         <div id="project-container">
+            <!--
             <div class="project">
                 <span id="edit"><button></button></span>
                 <h1>This is a test project 1</h1>
@@ -51,6 +100,7 @@
                 <h1>This is a test project 6</h1>
                 <p>Privit!</p>
             </div>
+            -->
             
         </div>
     </div>
