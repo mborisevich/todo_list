@@ -40,6 +40,7 @@ function closeModal(event, overlay){
     }
 }
 
+
 function openModalItems(overlay, itemList){
     openModal(overlay);
     generateProjectlistDOM(itemList)
@@ -53,6 +54,8 @@ function submitProject(){
     mainController.createProject(nameProject.value, descriptionProject.value, dateProject.value,
         priorityProject.value, notesProject.value);
     console.log(mainController.listProjects());
+    displayController.clearDOMProjects();
+    displayController.refreshDOMProjects();
 }
 
 function submitItem(){
@@ -105,6 +108,15 @@ class checklistItem {
     getInfo(){
         console.log(`The title of this is: ${this.title}, the description is ${this.description}, it is ${this.complete == 1 ? "complete" : "not complete"}`)
     }
+    getTitle(){
+        return this.title
+    }
+    getDescription(){
+        return this.description
+    }
+    getComplete(){
+        return this.complete
+    }
 }
 
 class Todo extends checklistItem{
@@ -144,15 +156,45 @@ class Project extends Todo {
     getInfo(){
         console.log(`The title of this is: ${this.title}, the description is ${this.description}, it is ${this.complete == 1 ? "complete" : "not complete"}`)
     }
-    getTitle(){
-        return this.title
-    }
+
     
     addTodoItem = super.addChecklistItem;
     removeTodoItem = super.removeChecklistItem;
+    getTitle = super.getTitle
+
 
 }
-
+function DOMController(){
+    function clearDOMProjects(){
+        let projectContainer = document.querySelector("div[id=project-container]")
+        while (projectContainer.hasChildNodes()){
+            projectContainer.removeChild(projectContainer.firstChild);
+        }
+    }
+    function refreshDOMProjects(){
+        mainController.listProjects().forEach(element => {
+            let projectContainer = document.querySelector("div[id=project-container]")
+            let projectElement = document.createElement("div")
+            let spanElement = document.createElement("span")
+            let buttonElement = document.createElement("button")
+            let header = document.createElement("h1")
+            let text = document.createElement("p")
+            projectElement.classList.add("project")
+            spanElement.setAttribute("id", "edit")
+            console.log(element)
+            console.log(element.getTitle())
+            header.innerHTML = element.getTitle()
+            text.innerHTML = element.getDescription()
+            projectElement.appendChild(buttonElement)
+            projectElement.appendChild(spanElement)
+            projectElement.appendChild(header)
+            projectElement.appendChild(text)
+            projectContainer.appendChild(projectElement)
+        })
+    }
+    return {refreshDOMProjects, clearDOMProjects}
+    
+}
 function mainProgram(){
     let projectList = []
     const defaultproject = createProject("default", "Default project")
@@ -183,5 +225,5 @@ function mainProgram(){
 }
 
 const mainController = mainProgram()
-
+const displayController = DOMController()
 //Separate classes into certain functions

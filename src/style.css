@@ -64,6 +64,7 @@ div.modal-overlay{
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: 1;
 }
 .modal-wrapper {
     width: 500px;
@@ -72,7 +73,7 @@ div.modal-overlay{
     position:fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%)
+    transform: translate(-50%, -50%);
 }
 
 .open-modal-btn-wrapper {
@@ -176,25 +177,25 @@ div#project-container{
     display: flex;
     flex-wrap: wrap;
     background-color: #12100E;
+    overflow: scroll;
 }
 div.project {
     position: relative;
     flex: 1;
-    min-height: 300px;
-    min-width: 300px;
-    font-size: 1.25rem;
-    line-height: 2rem;
+    font-size: 1.5vw;
+    min-height: 200px;
+    min-width: 200px;
+    max-height: 400px;
     padding: 20px;
     margin: 40px;
     border: none;
     background-color: #14213D;
-    overflow: scroll;
     color: white;
 
 }
 div.project>h1 {
-    font-size: 2rem;
     padding: 20px 0px;
+    font-size: 2vw;
 }
 button#edit {
     position: absolute;
