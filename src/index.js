@@ -22,8 +22,13 @@ closeBtn.addEventListener("click", event => closeModal(event, modalProjectOverla
 createProject.addEventListener("click", (event) => {
     event.preventDefault();
     submitProject();
-    modalProjectOverlay.classList.add("hide")
+    modalProjectOverlay.classList.add("hide");
 })
+createItem.addEventListener("click", (event) => {
+    event.preventDefault();
+    submitItem();
+    modalItemOverlay.classList.add("hide");
+});
 
 function openModal(overlay) {
     overlay.classList.remove("hide");
@@ -31,7 +36,7 @@ function openModal(overlay) {
 
 function closeModal(event, overlay){
     if (event.target.classList.contains("modal-overlay") || (event.target.classList.contains("close-modal-btn"))){
-        overlay.classList.add("hide")
+        overlay.classList.add("hide");
     }
 }
 
@@ -40,45 +45,49 @@ function openModalItems(overlay, itemList){
     generateProjectlistDOM(itemList)
 }
 function submitProject(){
-    const nameProject = document.querySelector("input[name=project-name]")
-    const descriptionProject = document.querySelector("textarea[name=project-description]")
-    const dateProject = document.querySelector("input[name=project-duedate]")
-    const priorityProject = document.querySelector("input[name=project-priority]")
-    const notesProject = document.querySelector("textarea[name=project-notes]")
+    const nameProject = document.querySelector("input[name=project-name]");
+    const descriptionProject = document.querySelector("textarea[name=project-description]");
+    const dateProject = document.querySelector("input[name=project-duedate]");
+    const priorityProject = document.querySelector("input[name=project-priority]");
+    const notesProject = document.querySelector("textarea[name=project-notes]");
     mainController.createProject(nameProject.value, descriptionProject.value, dateProject.value,
-        priorityProject.value, notesProject.value)
-    console.log(mainController.listProjects())
+        priorityProject.value, notesProject.value);
+    console.log(mainController.listProjects());
 }
 
-function submitItem(project){
-    const nameItem = document.querySelector("input[name=name]")
-    const descriptionItem = document.querySelector("textarea[name=description]")
-    const dateItem= document.querySelector("input[name=duedate]")
-    const priorItem = document.querySelector("input[name=priority]")
-    const notesItem= document.querySelector("textarea[name=notes]")
-    mainController.createTodo(nameItem, descriptionItem, dateItem,
-        priorItem, notesItem, project)
+function submitItem(){
+    const nameItem = document.querySelector("input[name=name]");
+    const descriptionItem = document.querySelector("textarea[name=description]");
+    const dateItem= document.querySelector("input[name=duedate]");
+    const priorItem = document.querySelector("input[name=priority]");
+    const notesItem= document.querySelector("textarea[name=notes]");
+    const project = document.querySelector("select[name=project-choice]");
+    let indexNumber = project.selectedIndex;
+    console.log(indexNumber);
+    mainController.createTodo(nameItem.value, descriptionItem.value, dateItem.value,
+        priorItem.value, notesItem.value, mainController.listProjects()[indexNumber]);
+    console.log(mainController.listProjects())
 }
 function generateProjectlistDOM(list){
-    const selectBar = document.querySelector("select[name=project-choice]")
+    const selectBar = document.querySelector("select[name=project-choice]");
     while (selectBar.hasChildNodes()){
-        selectBar.removeChild(selectBar.firstChild)
+        selectBar.removeChild(selectBar.firstChild);
     }
     for (let i=0; i<list.length; i++){
-        let selectItem = document.createElement("option")
-        selectItem.setAttribute("value", list[i].title)
-        selectItem.setAttribute("id", `${i}`)
-        selectItem.innerHTML = list[i].getTitle()
-        selectBar.appendChild(selectItem)
+        let selectItem = document.createElement("option");
+        selectItem.setAttribute("value", list[i].title);
+        selectItem.setAttribute("id", `${i}`);
+        selectItem.innerHTML = list[i].getTitle();
+        selectBar.appendChild(selectItem);
     }
 }
 
 function saveProjects(){
-    console.log("Saving projects")
+    console.log("Saving projects");
 }
 
 function retrieveProjects(){
-    console.log("Retrieving projects")
+    console.log("Retrieving projects");
 }
 class checklistItem {
     constructor(title, description){
