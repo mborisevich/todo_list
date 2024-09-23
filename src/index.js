@@ -12,7 +12,10 @@ const openItemModal = document.querySelector("button.open-modal-btn-item")
 const closeItemModal = document.querySelector(".close-modal-btn.item-modal")
 const modalItemOverlay=document.querySelector(".modal-overlay.item-overlay")
 const createItem = document.querySelector(".submit-item")
-
+const viewProjects = document.querySelector(".view-projects")
+const viewItems = document.querySelector(".view-items")
+viewItems.addEventListener("click", event => displayController.refreshTodoItems())
+viewProjects.addEventListener("click", event => displayController.refreshDOMProjects())
 openItemModal.addEventListener("click", event => openModalItems(modalItemOverlay,mainController.listProjects()))
 closeItemModal.addEventListener("click", event => closeModal(event, modalItemOverlay))
 modalItemOverlay.addEventListener("click", event => closeModal(event, modalItemOverlay))
@@ -54,7 +57,6 @@ function submitProject(){
     mainController.createProject(nameProject.value, descriptionProject.value, dateProject.value,
         priorityProject.value, notesProject.value);
     console.log(mainController.listProjects());
-    displayController.clearDOMProjects();
     displayController.refreshDOMProjects();
 }
 
@@ -172,6 +174,7 @@ function DOMController(){
         }
     }
     function refreshDOMProjects(){
+        clearDOMProjects()
         mainController.listProjects().forEach(element => {
             let projectContainer = document.querySelector("div[id=project-container]")
             let projectElement = document.createElement("div")
@@ -192,7 +195,36 @@ function DOMController(){
             projectContainer.appendChild(projectElement)
         })
     }
-    return {refreshDOMProjects, clearDOMProjects}
+    function refreshTodoItems(){
+        clearDOMProjects()
+        console.log("displaying todo items...")
+        let projectContainer = document.querySelector("div[id=project-container]")
+        mainController.listProjects().forEach(element => {
+            element.getItems().forEach(item => {
+                let itemElement = document.createElement("div")
+                let spanElement = document.createElement("span")
+                let buttonElement = document.createElement("button")
+                let header = document.createElement("h1")
+                let projectName = document.createElement("p")
+                let text = document.createElement("p")
+                itemElement.classList.add("item")
+                spanElement.setAttribute("id", "edit")
+                console.log(element)
+                console.log(element.getTitle())
+                header.innerHTML = item.getTitle()
+                projectName.innerHTML = `Project: ${element.getTitle()}`
+                projectName.classList.add("project-name")
+                text.innerHTML = item.getDescription()
+                itemElement.appendChild(buttonElement)
+                itemElement.appendChild(spanElement)
+                itemElement.appendChild(header)
+                itemElement.appendChild(projectName)
+                itemElement.appendChild(text)
+                projectContainer.appendChild(itemElement)
+            })
+        })
+    }
+    return {refreshDOMProjects, clearDOMProjects, refreshTodoItems}
     
 }
 function mainProgram(){

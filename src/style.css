@@ -179,7 +179,8 @@ div#project-container{
     background-color: #12100E;
     overflow: scroll;
 }
-div.project {
+div.project,
+div.item{
     position: relative;
     flex: 1;
     font-size: 1.5vw;
@@ -193,9 +194,14 @@ div.project {
     color: white;
 
 }
-div.project>h1 {
+div.project>h1,
+div.item>h1 {
     padding: 20px 0px;
     font-size: 2vw;
+}
+div.item>.project-name {
+    padding: 20px 0px;
+    color: #FFC800;
 }
 button#edit {
     position: absolute;
