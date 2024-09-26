@@ -1,6 +1,6 @@
 console.log("Hell world")
 const defaultproject = []
-import { compareAsc, format } from "date-fns"
+import { compareAsc, compareDesc, format } from "date-fns"
 import "./style.css"
 
 const openProjectModal = document.querySelector("button.open-modal-btn");
@@ -14,6 +14,12 @@ const modalItemOverlay=document.querySelector(".modal-overlay.item-overlay")
 const createItem = document.querySelector(".submit-item")
 const viewProjects = document.querySelector(".view-projects")
 const viewItems = document.querySelector(".view-items")
+const projectContainer = document.querySelector("div[id=project-container]")
+
+projectContainer.addEventListener("click", event => {
+    let target = event.target
+
+})
 viewItems.addEventListener("click", event => displayController.refreshTodoItems())
 viewProjects.addEventListener("click", event => displayController.refreshDOMProjects())
 openItemModal.addEventListener("click", event => openModalItems(modalItemOverlay,mainController.listProjects()))
@@ -142,9 +148,32 @@ class Todo extends checklistItem{
     countItems(){
         console.log(this.itemlist.length)
     }
-
-    getItems(){
+    sortItemsPriority(){
+        this.itemlist.sort((a,b) => {
+            const priorityA = a.getPriority()
+            const priorityB = b.getPriority()
+            if (priorityA > priorityB){
+                return 1
+            }
+            if (priorityA < priorityB){
+                return -1
+            }
+        })
+    }
+    sortByDate(){
+        this.itemlist.sort((a,b) => {
+            return compareAsc(a.getDuedate(), b.getDuedate())
+        })
+    }
+    getItems(sorter=this.sortByDate()){
+        console.log(this.itemlist)
         return this.itemlist
+    }
+    getPriority(){
+        return this.priority
+    }
+    getDuedate(){
+        return this.dueDate
     }
 
 }; 
@@ -162,13 +191,13 @@ class Project extends Todo {
     
     addTodoItem = super.addChecklistItem;
     removeTodoItem = super.removeChecklistItem;
-    getTitle = super.getTitle
+    getTitle = super.getTitle;
+    getPriority = super.getPriority;
 
 
 }
 function DOMController(){
     function clearDOMProjects(){
-        let projectContainer = document.querySelector("div[id=project-container]")
         while (projectContainer.hasChildNodes()){
             projectContainer.removeChild(projectContainer.firstChild);
         }
@@ -193,43 +222,60 @@ function DOMController(){
             projectElement.appendChild(header)
             projectElement.appendChild(text)
             projectContainer.appendChild(projectElement)
+            projectElement.addEventListener("click", event => {
+                viewItems(element, element.getItems())
+                
+            })
         })
+    }
+    //Streamline view project and item functions 
+    function viewItems(project, itemlist=project.getItems()){
+        clearDOMProjects()
+        itemlist.forEach(item => {
+                let itemElement = document.createElement("div")
+                let spanElement = document.createElement("span")
+                let buttonElement = document.createElement("button")
+                let header = document.createElement("h1")
+                let projectName = document.createElement("p")
+                let dueDate = document.createElement("p")
+                let text = document.createElement("p")
+                itemElement.classList.add("item")
+                spanElement.setAttribute("id", "edit")
+                console.log(item)
+                console.log(item.getTitle())
+                header.innerHTML = item.getTitle()
+                projectName.innerHTML = `Project: ${project.getTitle()}`
+                projectName.classList.add("project-name")
+                dueDate.innerHTML = `Deadline: ${item.getDuedate()}`
+                dueDate.classList.add("due-date")
+                text.innerHTML = item.getDescription()
+                itemElement.appendChild(buttonElement)
+                itemElement.appendChild(spanElement)
+                itemElement.appendChild(header)
+                itemElement.appendChild(dueDate)
+                itemElement.appendChild(projectName)
+                itemElement.appendChild(text)
+                projectContainer.appendChild(itemElement)
+        
+        })
+
+
     }
     function refreshTodoItems(){
         clearDOMProjects()
         console.log("displaying todo items...")
         let projectContainer = document.querySelector("div[id=project-container]")
         mainController.listProjects().forEach(element => {
-            element.getItems().forEach(item => {
-                let itemElement = document.createElement("div")
-                let spanElement = document.createElement("span")
-                let buttonElement = document.createElement("button")
-                let header = document.createElement("h1")
-                let projectName = document.createElement("p")
-                let text = document.createElement("p")
-                itemElement.classList.add("item")
-                spanElement.setAttribute("id", "edit")
-                console.log(element)
-                console.log(element.getTitle())
-                header.innerHTML = item.getTitle()
-                projectName.innerHTML = `Project: ${element.getTitle()}`
-                projectName.classList.add("project-name")
-                text.innerHTML = item.getDescription()
-                itemElement.appendChild(buttonElement)
-                itemElement.appendChild(spanElement)
-                itemElement.appendChild(header)
-                itemElement.appendChild(projectName)
-                itemElement.appendChild(text)
-                projectContainer.appendChild(itemElement)
-            })
+            viewItems(element,element.getItems())
         })
     }
+    
     return {refreshDOMProjects, clearDOMProjects, refreshTodoItems}
     
 }
 function mainProgram(){
     let projectList = []
-    const defaultproject = createProject("default", "Default project")
+    const defaultproject = createProject("default", "Default project", format(new Date(), 'yyyy-MM-dd'), 5, "none")
     function createProject(title, description, dueDate, priority, notes){
         const newProject = new Project(title, description, dueDate, priority, notes)
         projectList.push(newProject);
@@ -243,7 +289,29 @@ function mainProgram(){
         todo.addChecklistItem(newItem)
     }
     function listProjects(){
+        sortProjectsPriority(projectList)
         return projectList
+    }
+    function sortByDate(list){
+
+    }
+    function listProjectsNew(sorter, list){
+        sorter(list)
+    }
+    function sortProjectsPriority(projectList){
+        projectList.sort((a,b) => {
+            const priorityA = a.getPriority()
+            const priorityB = b.getPriority()
+            if (priorityA > priorityB){
+                return 1
+            }
+            if (priorityA < priorityB){
+                return -1
+            }
+        })
+    }
+    function sortProjectsDuedate(){
+        console.log("sorting by duedate")
     }
     function editItem(key, value, item){
         if (item[`${key}`]){
