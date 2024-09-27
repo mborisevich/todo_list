@@ -203,7 +203,7 @@ div.item>.project-name {
     padding: 20px 0px;
     color: #FFC800;
 }
-button#edit {
+button#expand {
     position: absolute;
     top: 5px;
     right: 10px;
@@ -211,7 +211,7 @@ button#edit {
     background-color: white;
 }
 
-span#edit {
+span#expand {
     position: absolute;
     top: 5px;
     right: 10px;
@@ -220,14 +220,25 @@ span#edit {
     background-image: url(./eye-plus-outline.svg);
     filter: invert(100%) sepia(8%) saturate(7500%) hue-rotate(316deg) brightness(127%) contrast(110%);
 }
-span#edit>button{
+span#edit {
+    position: absolute;
+    top: 5px;
+    right: 60px;
     width: 40px;
     height: 40px;
+    background-image: url(./pencil-outline.svg);
+    filter: invert(100%) sepia(8%) saturate(7500%) hue-rotate(316deg) brightness(127%) contrast(110%);
+}
+span#expand>button{
+    width: 40px;
+    height: 40px;
+    border: none;
     opacity: 0;
 }
-span#edit>button:hover{
+span#expand>button:hover{
     cursor: grab;
 }
+span#expand:hover,
 span#edit:hover{
     filter: invert(54%) sepia(62%) saturate(3153%) hue-rotate(85deg) brightness(119%) contrast(124%);
 

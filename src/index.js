@@ -16,10 +16,6 @@ const viewProjects = document.querySelector(".view-projects")
 const viewItems = document.querySelector(".view-items")
 const projectContainer = document.querySelector("div[id=project-container]")
 
-projectContainer.addEventListener("click", event => {
-    let target = event.target
-
-})
 viewItems.addEventListener("click", event => displayController.refreshTodoItems())
 viewProjects.addEventListener("click", event => displayController.refreshDOMProjects())
 openItemModal.addEventListener("click", event => openModalItems(modalItemOverlay,mainController.listProjects()))
@@ -208,39 +204,69 @@ function DOMController(){
             let projectContainer = document.querySelector("div[id=project-container]")
             let projectElement = document.createElement("div")
             let spanElement = document.createElement("span")
+            let spanEdit = document.createElement("span")
             let buttonElement = document.createElement("button")
             let header = document.createElement("h1")
             let text = document.createElement("p")
             projectElement.classList.add("project")
-            spanElement.setAttribute("id", "edit")
+            spanElement.setAttribute("id", "expand")
+            spanEdit.setAttribute("id", "edit")
             console.log(element)
             console.log(element.getTitle())
             header.innerHTML = element.getTitle()
             text.innerHTML = element.getDescription()
             projectElement.appendChild(buttonElement)
             projectElement.appendChild(spanElement)
+            projectElement.appendChild(spanEdit)
             projectElement.appendChild(header)
             projectElement.appendChild(text)
             projectContainer.appendChild(projectElement)
-            projectElement.addEventListener("click", event => {
+            spanElement.addEventListener("click", event => {
+                clearDOMProjects();
                 viewItems(element, element.getItems())
                 
             })
         })
     }
+    function viewChecklist(todo){
+        clearDOMProjects();
+        todo.getItems().forEach(subItem => {
+        console.log("expanding item")
+        let itemElement = document.createElement("div")
+        let spanElement = document.createElement("span")
+        let buttonElement = document.createElement("button")
+        let header = document.createElement("h1")
+        let projectName = document.createElement("p")
+        let dueDate = document.createElement("p")
+        let text = document.createElement("p")
+        itemElement.classList.add("item")
+        spanElement.setAttribute("id", "expand")
+        header.innerHTML = subItem.getTitle()
+        dueDate.classList.add("due-date")
+        text.innerHTML = subItem.getDescription()
+        itemElement.appendChild(buttonElement)
+        itemElement.appendChild(spanElement)
+        itemElement.appendChild(header)
+        itemElement.appendChild(dueDate)
+        itemElement.appendChild(projectName)
+        itemElement.appendChild(text)
+        projectContainer.appendChild(itemElement)
+        })
+    }
     //Streamline view project and item functions 
     function viewItems(project, itemlist=project.getItems()){
-        clearDOMProjects()
         itemlist.forEach(item => {
                 let itemElement = document.createElement("div")
                 let spanElement = document.createElement("span")
+                let spanEdit = document.createElement("span")
                 let buttonElement = document.createElement("button")
                 let header = document.createElement("h1")
                 let projectName = document.createElement("p")
                 let dueDate = document.createElement("p")
                 let text = document.createElement("p")
                 itemElement.classList.add("item")
-                spanElement.setAttribute("id", "edit")
+                spanElement.setAttribute("id", "expand")
+                spanEdit.setAttribute("id", "edit")
                 console.log(item)
                 console.log(item.getTitle())
                 header.innerHTML = item.getTitle()
@@ -251,11 +277,15 @@ function DOMController(){
                 text.innerHTML = item.getDescription()
                 itemElement.appendChild(buttonElement)
                 itemElement.appendChild(spanElement)
+                itemElement.appendChild(spanEdit)
                 itemElement.appendChild(header)
                 itemElement.appendChild(dueDate)
                 itemElement.appendChild(projectName)
                 itemElement.appendChild(text)
                 projectContainer.appendChild(itemElement)
+                spanElement.addEventListener("click", event => {
+                    viewChecklist(item);
+                })
         
         })
 

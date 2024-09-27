@@ -1,0 +1,12 @@
+Missing features:
+Dropdown bar in create todo to select project to add the item to
+Functional view projects (add function which adds elements from projectlist to DOM)
+Functional view todo (add function which adds elements from todo list for each project to DOM)
+Sorting todos or projects by due date
+View button on project to view todos belonging to that project
+Edit button for project
+Edit button for todo
+Edit modal for project
+Edit modal for todo
+Coloring todos/projects based on priority
+
