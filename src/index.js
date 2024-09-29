@@ -17,7 +17,7 @@ const viewItems = document.querySelector(".view-items")
 const projectContainer = document.querySelector("div[id=project-container]")
 
 viewItems.addEventListener("click", event => displayController.refreshTodoItems())
-viewProjects.addEventListener("click", event => displayController.refreshDOMProjects())
+viewProjects.addEventListener("click", event => displayController.refreshProjects())
 openItemModal.addEventListener("click", event => openModalItems(modalItemOverlay,mainController.listProjects()))
 closeItemModal.addEventListener("click", event => closeModal(event, modalItemOverlay))
 modalItemOverlay.addEventListener("click", event => closeModal(event, modalItemOverlay))
@@ -59,7 +59,7 @@ function submitProject(){
     mainController.createProject(nameProject.value, descriptionProject.value, dateProject.value,
         priorityProject.value, notesProject.value);
     console.log(mainController.listProjects());
-    displayController.refreshDOMProjects();
+    displayController.refreshProjects();
 }
 
 function submitItem(){
@@ -193,13 +193,199 @@ class Project extends Todo {
 
 }
 function DOMController(){
-    function clearDOMProjects(){
+    const modalOverlay = document.querySelector(".edit-overlay")
+    function formFromObject(element){
+        let properties = Object.keys(element)
+        let elementList = []
+        console.log(properties)
+        properties.forEach(key => {
+            switch(key){
+                case "title":
+                    const nameLabel = document.createElement("label")
+                    const name = document.createElement("input")
+                    nameLabel.textContent = "Project name:"
+                    name.setAttribute("name", "project-name")
+                    name.setAttribute("type", "text")
+                    name.setAttribute("id", "project-name")
+                    name.setAttribute("required", "")
+                    name.setAttribute("maxlength", "60")
+                    nameLabel.setAttribute("for","project-name")
+                    elementList.push(nameLabel, name)
+                    break;
+                case "description":
+                    const description = document.createElement("textarea")
+                    const descLabel = document.createElement("label")
+                    description.setAttribute("name","project-description")
+                    description.setAttribute("id", "project-description")
+                    description.setAttribute("col", "10")
+                    description.setAttribute("rows", "5")
+                    description.setAttribute("required", "")
+                    descLabel.textContent = "Description:"
+                    elementList.push(descLabel, description)
+                    break;
+                case "dueDate":
+                    const dueDate = document.createElement("input")
+                    const dateLabel = document.createElement("label")
+                    dueDate.setAttribute("name","project-duedate")
+                    dueDate.setAttribute("type", "date")
+                    dueDate.setAttribute("id", "project-duedate")
+                    dueDate.setAttribute("required", "")
+                    dateLabel.textContent = "Due date:"
+                    elementList.push(dateLabel, dueDate)
+                    break;
+                case "priority":
+                    const priority = document.createElement("input")
+                    const priorityLabel = document.createElement("label")
+                    priority.setAttribute("name","project-priority")
+                    priority.setAttribute("id", "project-priority")
+                    priority.setAttribute("required", "")
+                    priority.setAttribute("type", "number")
+                    priority.setAttribute("min", "1")
+                    priority.setAttribute("max", "5")
+                    priorityLabel.textContent = "Priority:"
+                    elementList.push(priorityLabel, priority)
+                    break;
+                case "notes":
+                    const notes = document.createElement("textarea")
+                    const notesLabel = document.createElement("label")
+                    notes.setAttribute("name","project-notes")
+                    notes.setAttribute("id","project-notes")
+                    notesLabel.setAttribute("for","project-notes")
+                    notesLabel.textContent = "Notes:"
+                    elementList.push(notesLabel, notes)
+                    break;
+                case "complete":
+                    console.log("need complete divs")
+            }
+        })
+        const buttonConfirm = document.createElement("button")
+        buttonConfirm.classList.add("submit-project")
+        buttonConfirm.textContent = "Confirm changes"
+        elementList.push(buttonConfirm)
+        return {elementList, buttonConfirm}
+
+
+    }
+    function createEditProject(element){
+        const modalSkeleton = createModalSkeleton()
+        const formElements = formFromObject(element)
+        formElements.elementList.forEach((formElement) => {
+            modalSkeleton.form.appendChild(formElement)
+        })
+        /** const name = document.createElement("input")
+        const nameLabel = document.createElement("label")
+        const description = document.createElement("textarea")
+        const descLabel = document.createElement("label")
+        const dueDate = document.createElement("input")
+        const dateLabel = document.createElement("label")
+        const priority = document.createElement("input")
+        const priorityLabel = document.createElement("label")
+        const notes = document.createElement("textarea")
+        const notesLabel = document.createElement("label")
+        const buttonConfirm = document.createElement("button")
+        buttonConfirm.classList.add("submit-project")
+
+        name.setAttribute("name", "project-name")
+        name.setAttribute("type", "text")
+        name.setAttribute("id", "project-name")
+        name.setAttribute("required", "")
+        name.setAttribute("maxlength", "60")
+        description.setAttribute("name","project-description")
+        description.setAttribute("id", "project-description")
+        description.setAttribute("col", "10")
+        description.setAttribute("rows", "5")
+        description.setAttribute("required", "")
+        dueDate.setAttribute("name","project-duedate")
+        dueDate.setAttribute("type", "date")
+        dueDate.setAttribute("id", "project-duedate")
+        dueDate.setAttribute("required", "")
+        priority.setAttribute("name","project-priority")
+        priority.setAttribute("id", "project-priority")
+        priority.setAttribute("required", "")
+        priority.setAttribute("type", "number")
+        priority.setAttribute("min", "1")
+        priority.setAttribute("max", "5")
+        notes.setAttribute("name","project-notes")
+        notes.setAttribute("id","project-notes")
+        nameLabel.setAttribute("for","project-name")
+        descLabel.setAttribute("for","project-description")
+        dateLabel.setAttribute("for","project-duedate")
+        priorityLabel.setAttribute("for","project-priority")
+        notesLabel.setAttribute("for","project-notes")
+
+        dateLabel.textContent = "Due date:"
+        nameLabel.textContent = "Project name:"
+        priorityLabel.textContent = "Priority:"
+        notesLabel.textContent = "Notes:"
+        descLabel.textContent = "Description:"
+        buttonConfirm.textContent = "Confirm changes"
+        
+        modalSkeleton.form.appendChild(nameLabel)
+        modalSkeleton.form.appendChild(name)
+        modalSkeleton.form.appendChild(descLabel)
+        modalSkeleton.form.appendChild(description)
+        modalSkeleton.form.appendChild(dateLabel)
+        modalSkeleton.form.appendChild(dueDate)
+        modalSkeleton.form.appendChild(priorityLabel)
+        modalSkeleton.form.appendChild(priority)
+        modalSkeleton.form.appendChild(notesLabel)
+        modalSkeleton.form.appendChild(notes)
+        modalSkeleton.form.appendChild(buttonConfirm) **/
+
+        formElements.buttonConfirm.addEventListener("click", (event) => {
+            event.preventDefault()
+            console.log("confirm edit")
+            modalOverlay.classList.add("hide")
+            clearModal()
+        })
+        modalOverlay.classList.remove("hide")
+    }
+    function betterCreateEditModal(){
+        console.log("test")
+
+    }
+    function createModalSkeleton(){
+        const wrapper = document.createElement("div")
+        const closeButtonWrapper = document.createElement("div")
+        const closeButton = document.createElement("button")
+        const content = document.createElement("div")
+        const form = document.createElement("form")
+        wrapper.classList.add("modal-wrapper")
+        closeButtonWrapper.classList.add("close-btn-wrapper")
+        closeButton.classList.add("close-modal-btn")
+        closeButton.classList.add("edit-modal")
+        form.classList.add("project-form")
+        content.classList.add("modal-content")
+        closeButton.textContent = "Close"
+        modalOverlay.appendChild(wrapper)
+        wrapper.appendChild(closeButtonWrapper)
+        closeButtonWrapper.appendChild(closeButton)
+        wrapper.appendChild(content)
+        content.appendChild(form)
+
+        closeButton.addEventListener("click", () => {
+            console.log("close")
+            modalOverlay.classList.add("hide")
+            clearModal()
+        })
+        return {wrapper, closeButtonWrapper, closeButton, content, form}
+    }
+
+    function clearModal(){
+        while (modalOverlay.hasChildNodes()){
+            modalOverlay.removeChild(modalOverlay.firstChild);
+        }
+
+    }
+    function clearProjects(){
         while (projectContainer.hasChildNodes()){
             projectContainer.removeChild(projectContainer.firstChild);
         }
     }
-    function refreshDOMProjects(){
-        clearDOMProjects()
+    
+    
+    function refreshProjects(){
+        clearProjects()
         mainController.listProjects().forEach(element => {
             let projectContainer = document.querySelector("div[id=project-container]")
             let projectElement = document.createElement("div")
@@ -222,14 +408,18 @@ function DOMController(){
             projectElement.appendChild(text)
             projectContainer.appendChild(projectElement)
             spanElement.addEventListener("click", event => {
-                clearDOMProjects();
+                clearProjects();
                 viewItems(element, element.getItems())
                 
+            })
+            spanEdit.addEventListener("click", event => {
+                clearModal();
+                createEditProject(element);
             })
         })
     }
     function viewChecklist(todo){
-        clearDOMProjects();
+        clearProjects();
         todo.getItems().forEach(subItem => {
         console.log("expanding item")
         let itemElement = document.createElement("div")
@@ -292,7 +482,7 @@ function DOMController(){
 
     }
     function refreshTodoItems(){
-        clearDOMProjects()
+        clearProjects()
         console.log("displaying todo items...")
         let projectContainer = document.querySelector("div[id=project-container]")
         mainController.listProjects().forEach(element => {
@@ -300,7 +490,7 @@ function DOMController(){
         })
     }
     
-    return {refreshDOMProjects, clearDOMProjects, refreshTodoItems}
+    return {refreshProjects, clearProjects, refreshTodoItems}
     
 }
 function mainProgram(){

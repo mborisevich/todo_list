@@ -68,6 +68,7 @@ div.modal-overlay{
 }
 .modal-wrapper {
     width: 500px;
+    min-height: 500px;
     padding-bottom: 20px;
     background: ghostwhite;
     position:fixed;
@@ -177,7 +178,7 @@ div#project-container{
     display: flex;
     flex-wrap: wrap;
     background-color: #12100E;
-    overflow: scroll;
+    overflow: auto;
 }
 div.project,
 div.item{
