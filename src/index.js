@@ -74,6 +74,7 @@ function submitItem(){
     mainController.createTodo(nameItem.value, descriptionItem.value, dateItem.value,
         priorItem.value, notesItem.value, mainController.listProjects()[indexNumber]);
     console.log(mainController.listProjects())
+    displayController.refreshTodoItems();
 }
 function generateProjectlistDOM(list){
     const selectBar = document.querySelector("select[name=project-choice]");
@@ -200,7 +201,7 @@ class Project extends Todo {
 }
 function DOMController(){
     const modalOverlay = document.querySelector(".edit-overlay")
-
+    const navPanel = document.querySelector("div#nav-panel");
     function formFromObject(element){
         let properties = Object.keys(element)
         let elementList = []
@@ -344,10 +345,24 @@ function DOMController(){
             projectContainer.removeChild(projectContainer.firstChild);
         }
     }
-    
+    function refreshNav(){
+        navPanel.replaceChildren()
+        let headerNav = document.createElement("p")
+        let headerNavProject = document.createElement("p")
+        headerNav.textContent = "Todo: "
+        let incomingTodo = mainController.listProjects()[0].getItems()[0];
+        if (incomingTodo){
+            headerNavProject.textContent = incomingTodo.getTitle()
+        } else {
+            headerNavProject.textContent = mainController.listProjects()[0].getTitle();
+        }
+        navPanel.appendChild(headerNav);
+        navPanel.appendChild(headerNavProject);
+    }
     
     function refreshProjects(){
-        clearProjects()
+        clearProjects();
+        refreshNav();
         mainController.listProjects().forEach(element => {
             let projectContainer = document.querySelector("div[id=project-container]")
             let projectElement = document.createElement("div")
