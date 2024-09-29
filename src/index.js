@@ -218,6 +218,7 @@ function DOMController(){
                     title.setAttribute("required", "")
                     title.setAttribute("maxlength", "60")
                     nameLabel.setAttribute("for","project-title")
+                    title.value = element.title
                     elementList.push(nameLabel, title)
                     break;
                 case "description":
@@ -229,6 +230,7 @@ function DOMController(){
                     description.setAttribute("rows", "5")
                     description.setAttribute("required", "")
                     descLabel.textContent = "Description:"
+                    description.value = element.description
                     elementList.push(descLabel, description)
                     break;
                 case "dueDate":
@@ -239,6 +241,7 @@ function DOMController(){
                     dueDate.setAttribute("id", "project-duedate")
                     dueDate.setAttribute("required", "")
                     dateLabel.textContent = "Due date:"
+                    dueDate.value = element.dueDate
                     elementList.push(dateLabel, dueDate)
                     break;
                 case "priority":
@@ -251,6 +254,7 @@ function DOMController(){
                     priority.setAttribute("min", "1")
                     priority.setAttribute("max", "5")
                     priorityLabel.textContent = "Priority:"
+                    priority.value = element.priority
                     elementList.push(priorityLabel, priority)
                     break;
                 case "notes":
@@ -260,6 +264,7 @@ function DOMController(){
                     notes.setAttribute("id","project-notes")
                     notesLabel.setAttribute("for","project-notes")
                     notesLabel.textContent = "Notes:"
+                    notes.value = element.notes
                     elementList.push(notesLabel, notes)
                     break;
                 case "complete":
@@ -350,16 +355,20 @@ function DOMController(){
             let spanEdit = document.createElement("span")
             let buttonElement = document.createElement("button")
             let header = document.createElement("h1")
+            let dueDate = document.createElement("p")
             let text = document.createElement("p")
             projectElement.classList.add("project")
             spanElement.setAttribute("id", "expand")
             spanEdit.setAttribute("id", "edit")
             header.innerHTML = element.getTitle()
             text.innerHTML = element.getDescription()
+            dueDate.innerHTML = `Deadline: ${element.getDuedate()}`
+            dueDate.classList.add("due-date")
             projectElement.appendChild(buttonElement)
             projectElement.appendChild(spanElement)
             projectElement.appendChild(spanEdit)
             projectElement.appendChild(header)
+            projectElement.appendChild(dueDate)
             projectElement.appendChild(text)
             projectContainer.appendChild(projectElement)
             spanElement.addEventListener("click", event => {
