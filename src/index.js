@@ -6,18 +6,39 @@ import { format } from "date-fns"
 import "./style.css"
 
 
-
-function saveProjects(){
-    console.log("Saving projects");
+function storageAvailable(type) {
+    let storage;
+    try {
+        storage = window[type];
+        const x = "__storage_test__";
+        storage.setItem(x, x);
+        storage.removeItem(x);
+        return true;
+    } catch (e) {
+        return (
+            e instanceof DOMException && 
+            e.name === "QuotaExceededError" &&
+            storage &&
+            storage.length !== 0
+        )
+    }
 }
 
-function retrieveProjects(){
-    console.log("Retrieving projects");
+if (storageAvailable("localStorage")) {
+    console.log("We can use storage")
+    } else {
+        console.log("No local storage available.")
+
 }
 
 function mainProgram(){
+    document.addEventListener("DOMContentLoaded", function() {
+        retrieveProjects();
+        displayController.refreshProjects();
+      });
     let projectList = []
-    const defaultproject = createProject("default", "Default project", format(new Date(), 'yyyy-MM-dd'), 5, "none")
+    let projectCount = 0
+    let itemCount = 0
     function createProject(title, description, dueDate, priority, notes){
         const newProject = new Project(title, description, dueDate, priority, notes)
         projectList.push(newProject);
@@ -48,6 +69,38 @@ function mainProgram(){
         item.priority = priority;
         item.notes = notes;
     }
+    function deleteItem(project, index){
+        project.removeTodoItem(index);
+
+    }
+    function deleteProject(index){
+        projectList.splice(index, 1)
+    }
+    function clearSave(){
+        localStorage.clear()
+    }
+    function saveProjects(){
+        clearSave()
+        for (let i = 0; i < projectList.length; i++){
+            localStorage.setItem(`project-${i}`, JSON.stringify(projectList[i]))
+        }
+    }
+    function retrieveProjects(){
+        for (let i in localStorage){
+            console.log(i)
+                if (localStorage.getItem(i) && i.split("-")[0] == "project" && JSON.parse(localStorage.getItem(i)).title != "default"){
+                    let project = JSON.parse(localStorage.getItem(i))
+                    let title = project.title
+                    let description = project.description
+                    let dueDate = project.dueDate
+                    let priority = project.priority
+                    let notes = project.notes
+                    console.log(title)
+                    createProject(title, description, dueDate, priority, notes)
+                }
+        }
+
+    }
 
     function listProjectsNew(sorter, list){
         sorter(list)
@@ -67,10 +120,11 @@ function mainProgram(){
     function sortProjectsDuedate(){
         console.log("sorting by duedate")
     }
-    return { createProject, createTodo, createTodoItem, listProjects, editItem, editProject}
+    return { createProject, createTodo, createTodoItem, listProjects, editItem, editProject, deleteProject, deleteItem, retrieveProjects, saveProjects}
 }
 
 const mainController = mainProgram()
 const displayController = DOMController(mainController)
 displayController.InitializeMain();
+
 //Separate classes into certain functions

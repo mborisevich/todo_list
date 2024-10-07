@@ -58,6 +58,7 @@ function DOMController(mainController){
         mainController.createProject(nameProject.value, descriptionProject.value, dateProject.value,
             priorityProject.value, notesProject.value);
         console.log(mainController.listProjects());
+        mainController.saveProjects()
         refreshProjects();
     }
     
@@ -73,6 +74,7 @@ function DOMController(mainController){
         mainController.createTodo(nameItem.value, descriptionItem.value, dateItem.value,
             priorItem.value, notesItem.value, mainController.listProjects()[indexNumber]);
         console.log(mainController.listProjects())
+        mainController.saveProjects()
         refreshTodoItems();
     }
     function generateProjectlistDOM(list){
@@ -257,24 +259,28 @@ function DOMController(mainController){
         let headerNav = document.createElement("p")
         let headerNavProject = document.createElement("p")
         headerNav.textContent = "Todo: "
-        let incomingTodo = mainController.listProjects()[0].getItems()[0];
-        if (incomingTodo){
-            headerNavProject.textContent = incomingTodo.getTitle()
-        } else {
-            headerNavProject.textContent = mainController.listProjects()[0].getTitle();
-        }
+        if (mainController.listProjects().length !== 0){
+            let incomingTodo = mainController.listProjects()[0].getItems()[0];
+            if (incomingTodo){
+                headerNavProject.textContent = incomingTodo.getTitle()
+            } else {
+                headerNavProject.textContent = mainController.listProjects()[0].getTitle();
+            }
+    }
         navPanel.appendChild(headerNav);
         navPanel.appendChild(headerNavProject);
     }
     
     function refreshProjects(){
         clearProjects();
-        refreshNav();
-        mainController.listProjects().forEach(element => {
+        if (mainController.listProjects().length !== 0){
+        mainController.listProjects().forEach((element, index) => {
+
             let projectContainer = document.querySelector("div[id=project-container]")
             let projectElement = document.createElement("div")
             let spanElement = document.createElement("span")
             let spanEdit = document.createElement("span")
+            let spanDelete = document.createElement("span")
             let buttonElement = document.createElement("button")
             let header = document.createElement("h1")
             let dueDate = document.createElement("p")
@@ -282,6 +288,7 @@ function DOMController(mainController){
             projectElement.classList.add("project")
             spanElement.setAttribute("id", "expand")
             spanEdit.setAttribute("id", "edit")
+            spanDelete.setAttribute("id", "delete")
             header.innerHTML = element.getTitle()
             text.innerHTML = element.getDescription()
             dueDate.innerHTML = `Deadline: ${element.getDuedate()}`
@@ -289,6 +296,7 @@ function DOMController(mainController){
             projectElement.appendChild(buttonElement)
             projectElement.appendChild(spanElement)
             projectElement.appendChild(spanEdit)
+            projectElement.appendChild(spanDelete)
             projectElement.appendChild(header)
             projectElement.appendChild(dueDate)
             projectElement.appendChild(text)
@@ -302,7 +310,16 @@ function DOMController(mainController){
                 clearModal();
                 createEditProject(element);
             })
+            spanDelete.addEventListener("click", event => {
+                /** deleteItem(); */
+                mainController.deleteProject(index);
+                mainController.saveProjects()
+                console.log("deleting");
+                refreshProjects();
+            })
         })
+        }
+        refreshNav();
     }
     function viewChecklist(todo){
         clearProjects();
@@ -330,10 +347,11 @@ function DOMController(mainController){
     }
     //Streamline view project and item functions 
     function viewItems(project, itemlist=project.getItems()){
-        itemlist.forEach(item => {
+        itemlist.forEach((item, index) => {
                 let itemElement = document.createElement("div")
                 let spanElement = document.createElement("span")
                 let spanEdit = document.createElement("span")
+                let spanDelete = document.createElement("span")
                 let buttonElement = document.createElement("button")
                 let header = document.createElement("h1")
                 let projectName = document.createElement("p")
@@ -342,6 +360,7 @@ function DOMController(mainController){
                 itemElement.classList.add("item")
                 spanElement.setAttribute("id", "expand")
                 spanEdit.setAttribute("id", "edit")
+                spanDelete.setAttribute("id", "delete")
                 console.log(item)
                 console.log(item.getTitle())
                 header.innerHTML = item.getTitle()
@@ -353,6 +372,7 @@ function DOMController(mainController){
                 itemElement.appendChild(buttonElement)
                 itemElement.appendChild(spanElement)
                 itemElement.appendChild(spanEdit)
+                itemElement.appendChild(spanDelete)
                 itemElement.appendChild(header)
                 itemElement.appendChild(dueDate)
                 itemElement.appendChild(projectName)
@@ -363,6 +383,13 @@ function DOMController(mainController){
                 })
                 spanEdit.addEventListener("click", event => {
                     createEditTodo(item)
+                })
+                spanDelete.addEventListener("click", event => {
+                    /** deleteItem(); */
+                    mainController.deleteItem(project, index);
+                    mainController.saveProjects()
+                    console.log("deleting");
+                    refreshProjects();
                 })
         
         })

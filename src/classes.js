@@ -47,8 +47,8 @@ class Todo extends checklistItem{
     addChecklistItem(checklistItem){
         this.itemlist.push(checklistItem)
     }
-    removeChecklistItem(checklistItem){
-        this.itemlist.remove(checklistItem)
+    removeChecklistItem(index){
+        this.itemlist.splice(index, 1)
     }
 
     countItems(){
