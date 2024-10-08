@@ -39,9 +39,10 @@ function mainProgram(){
     let projectList = []
     let projectCount = 0
     let itemCount = 0
-    function createProject(title, description, dueDate, priority, notes){
-        const newProject = new Project(title, description, dueDate, priority, notes)
+    function createProject(title, description, dueDate, priority, notes, itemlist = []){
+        const newProject = new Project(title, description, dueDate, priority, notes, itemlist)
         projectList.push(newProject);
+        return newProject
     }
     function createTodo(title, description, dueDate, priority, notes, project){
         const newTodoItem = new Todo(title, description, dueDate, priority, notes)
@@ -95,8 +96,18 @@ function mainProgram(){
                     let dueDate = project.dueDate
                     let priority = project.priority
                     let notes = project.notes
+                    let items = project.itemlist
                     console.log(title)
-                    createProject(title, description, dueDate, priority, notes)
+                    console.log(items)
+                    const projectData = createProject(title, description, dueDate, priority, notes)
+                    for (let i in items){
+                        let itemTitle = items[i].title
+                        let itemDescription = items[i].description
+                        let itemDueDate = items[i].dueDate
+                        let itemPriority = items[i].priority
+                        let notes = items[i].notes
+                        createTodo(itemTitle, itemDescription, itemDueDate, itemPriority, notes, projectData)
+                    }
                 }
         }
 
